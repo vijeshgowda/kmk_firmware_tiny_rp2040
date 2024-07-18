@@ -19,7 +19,7 @@ split = Split(split_type=SplitType.UART, split_side=SplitSide.LEFT,
 # split = Split(split_type=SplitType.UART, split_side=SplitSide.RIGHT, data_pin=board.GP0, data_pin2=board.GP1, use_pio=True, uart_flip = True)
 keyboard.modules.append(split)
 
-keyboard.row_pins = (board.GP9, board.GP8, board.GP7, board.GP6)
+keyboard.row_pins = (board.GP6, board.GP7, board.GP8, board.GP9)
 keyboard.col_pins = (board.GP27, board.GP26, board.GP22,
                      board.GP21, board.GP20, board.GP19)
 keyboard.diode_orientation = DiodeOrientation.COL2ROW
