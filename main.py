@@ -21,6 +21,8 @@ keyboard = KMKKeyboard()
 
 keyboard.modules.append(Layers())
 
+
+# Start display bit
 i2c_bus = busio.I2C(scl=board.GP5, sda=board.GP4)
 
 driver = SSD1306(
@@ -48,10 +50,18 @@ display = Display(
 )
 
 display.entries = [
-    TextEntry(text="Layer = 1", x=4, y=0),
-    TextEntry(text="I am not Greesh :)", x=4, y=18),
+    TextEntry(text="Hi :)", x=128, y=0, x_anchor="R", y_anchor="T"),
+    TextEntry(text='Layer: ', x=0, y=32, y_anchor='B'),
+    TextEntry(text='BASE', x=40, y=32, y_anchor='B', layer=0),
+    TextEntry(text='NUM', x=40, y=32, y_anchor='B', layer=1),
+    TextEntry(text='NAV', x=40, y=32, y_anchor='B', layer=2),
+    TextEntry(text='0 1 2', x=0, y=4),
+    TextEntry(text='0', x=0, y=4, inverted=True, layer=0),
+    TextEntry(text='1', x=12, y=4, inverted=True, layer=1),
+    TextEntry(text='2', x=24, y=4, inverted=True, layer=2),
 ]
 keyboard.extensions.append(display)
+# End diplay bit
 
 # Debugging: Print initialization status
 print("Initializing Split Module")
