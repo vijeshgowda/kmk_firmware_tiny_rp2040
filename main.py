@@ -1,3 +1,4 @@
+from kmk.extensions.display.builtin import BuiltInDisplay
 from kmk.extensions.rgb import RGB, AnimationModes
 from kmk.modules.layers import Layers
 from kmk.modules.split import Split, SplitType, SplitSide
@@ -7,11 +8,50 @@ from kmk.kmk_keyboard import KMKKeyboard
 import board
 import time
 
+import busio
+
+from kmk.extensions.display import Display, TextEntry, ImageEntry
+
+# For SSD1306
+from kmk.extensions.display.ssd1306 import SSD1306
+
 print("Starting")
 
 keyboard = KMKKeyboard()
 
 keyboard.modules.append(Layers())
+
+i2c_bus = busio.I2C(scl=board.GP5, sda=board.GP4)
+
+driver = SSD1306(
+    i2c=i2c_bus,
+
+)
+
+display = Display(
+    # Mandatory:
+    display=driver,
+    # Optional:
+    width=128,  # screen size
+    height=32,  # screen size
+    flip=False,  # flips your display content
+    flip_left=False,  # flips your display content on left side split
+    flip_right=False,  # flips your display content on right side split
+    brightness=0.8,  # initial screen brightness level
+    brightness_step=0.1,  # used for brightness increase/decrease keycodes
+    dim_time=20,  # time in seconds to reduce screen brightness
+    dim_target=0.1,  # set level for brightness decrease
+    off_time=60,  # time in seconds to turn off screen
+    powersave_dim_time=10,  # time in seconds to reduce screen brightness
+    powersave_dim_target=0.1,  # set level for brightness decrease
+    powersave_off_time=30,  # time in seconds to turn off screen
+)
+
+display.entries = [
+    TextEntry(text="Layer = 1", x=4, y=0),
+    TextEntry(text="I am not Greesh :)", x=4, y=18),
+]
+keyboard.extensions.append(display)
 
 # Debugging: Print initialization status
 print("Initializing Split Module")
@@ -49,7 +89,7 @@ keyboard.keymap = keymap = [
         KC.LCTL,    KC.A,       KC.S,       KC.D,      KC.F,       KC.G,      KC.H,     KC.J,       KC.K,       KC.L,       KC.SCOLON,	KC.QUOTE,
         KC.LSHIFT,  KC.Z,       KC.X,       KC.C,      KC.V,       KC.B,      KC.N,     KC.M,       KC.COMMA,	KC.DOT,		KC.SLASH,	KC.RSHIFT,
         XXXXXXX,    XXXXXXX,    XXXXXXX,    KC.LCTRL,  KC.MO(
-            1),   KC.SPACE,  KC.ENTER, KC.MO(2),   KC.RALT
+            1),   KC.ENTER,  KC.MO(2), KC.SPACE,  KC.RALT
     ],
     # Layer 1 (activated by pressing FN)
     [
